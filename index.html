@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Pertanyaan Serius</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #ffe6f0, #fff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h2 {
+      color: #d6336c;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 0 20px;
+      z-index: 2;
+    }
+
+    .buttons {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 200px;
+      z-index: 2;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+
+    #yes {
+      background-color: #ff66a3;
+      color: white;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+    }
+
+    #no {
+      background-color: #ccc;
+      color: #333;
+      top: 0;
+      left: 0;
+    }
+
+    .love {
+      position: absolute;
+      color: #ff4d88;
+      font-size: 24px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Aku mau nanya serius, kamu mau nerima aku ngga jadi cowo favoritmu? 👉👈</h2>
+
+  <div class="buttons">
+    <button id="yes" onclick="kirimWA()">Mauuuuuuuuu</button>
+    <button id="no">Gak mauu</button>
+  </div>
+
+  <!-- Musik -->
+  <audio id="lagu" autoplay loop>
+    <source src="https://files.catbox.moe/75ooy9.mp3" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+
+  <script>
+    const noBtn = document.getElementById('no');
+    const container = document.querySelector('.buttons');
+    const lagu = document.getElementById('lagu');
+
+    function gerakTerus() {
+      const maxX = container.clientWidth - noBtn.offsetWidth;
+      const maxY = container.clientHeight - noBtn.offsetHeight;
+      const randX = Math.floor(Math.random() * maxX);
+      const randY = Math.floor(Math.random() * maxY);
+      noBtn.style.left = randX + "px";
+      noBtn.style.top = randY + "px";
+    }
+
+    noBtn.addEventListener('mouseenter', gerakTerus);
+    noBtn.addEventListener('touchstart', gerakTerus);
+
+    function buatLove() {
+      const love = document.createElement('div');
+      love.classList.add('love');
+      love.style.left = Math.random() * 100 + 'vw';
+      love.style.fontSize = 18 + Math.random() * 24 + 'px';
+      love.style.animationDuration = (3 + Math.random() * 3) + 's';
+      love.textContent = ['💐','❤️','🤍','😠','🥺'][Math.floor(Math.random() * 5)];
+      document.body.appendChild(love);
+      setTimeout(() => love.remove(), 6000);
+    }
+
+    setInterval(() => {
+      for (let i = 0; i < 3; i++) buatLove();
+    }, 500);
+
+    function kirimWA() {
+      if (lagu) {
+        lagu.play().catch((e) => {
+          console.log("Autoplay gagal saat klik:", e.message);
+        });
+      }
+
+      alert("YEEAAAYY!! Sekarang kamu jadi pacar akuu, akhirnyaaaa... >///<\nKamu itu seperti lagu ini (begitu sempurna)");
+
+      const pesan = "iyaa aku mau jadi cowomu, tapi janji yaa tolong selalu kasih yang terbaik buatku biar aku ga ngambek, soalnya aku gampang badmood wkwk";
+      const nomor = "62895609803131";
+      const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
+      window.location.href = url;
+    }
+
+    window.addEventListener('load', () => {
+      if (lagu) {
+        lagu.muted = true;
+        lagu.play().then(() => {
+          lagu.muted = false;
+        }).catch(() => {
+          console.log("Autoplay gagal saat load, nanti diputar saat klik.");
+        });
+      }
+    });
+  </script>
+</body>
+</html>
